@@ -15,7 +15,10 @@ class IOFileSystem implements FileSystem {
   ) : _fileDir = createDirectory(_cacheKey), _useDocumentsDir = useDocumentsDir; 
 
   static Future<Directory> createDirectory(String key) async {
-    final baseDir = _useDocumentsDir ? await getApplicationDocumentsDirectory() : await getTemporaryDirectory();
+    final baseDir = _useDocumentsDir
+      ? await getApplicationDocumentsDirectory()
+      : await getTemporaryDirectory();
+    
     final path = p.join(baseDir.path, key);
 
     const fs = LocalFileSystem();
