@@ -7,11 +7,12 @@ import 'package:path_provider/path_provider.dart';
 class IOFileSystem implements FileSystem {
   final Future<Directory> _fileDir;
   final String _cacheKey;
+  final bool _useDocumentsDir;
 
-  IOFileSystem(this._cacheKey) : _fileDir = createDirectory(_cacheKey);
+  IOFileSystem(this._cacheKey, this._useDocumentsDir = false) : _fileDir = createDirectory(_cacheKey);
 
   static Future<Directory> createDirectory(String key) async {
-    final baseDir = await getTemporaryDirectory();
+    final baseDir = _useDocumentsDir ? await getApplicationDocumentsDirectory() : await getTemporaryDirectory();
     final path = p.join(baseDir.path, key);
 
     const fs = LocalFileSystem();
