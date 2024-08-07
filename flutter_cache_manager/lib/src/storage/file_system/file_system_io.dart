@@ -12,10 +12,10 @@ class IOFileSystem implements FileSystem {
   IOFileSystem(
     this._cacheKey,
     {useDocumentsDir = false}
-  ) : _fileDir = createDirectory(_cacheKey), _useDocumentsDir = useDocumentsDir; 
+  ) : _fileDir = createDirectory(_cacheKey, useDocumentsDir), _useDocumentsDir = useDocumentsDir; 
 
-  static Future<Directory> createDirectory(String key) async {
-    final baseDir = _useDocumentsDir
+  static Future<Directory> createDirectory(String key, bool useDocumentsDir) async {
+    final baseDir = useDocumentsDir
       ? await getApplicationDocumentsDirectory()
       : await getTemporaryDirectory();
     
@@ -31,7 +31,7 @@ class IOFileSystem implements FileSystem {
   Future<File> createFile(String name) async {
     final directory = await _fileDir;
     if (!(await directory.exists())) {
-      await createDirectory(_cacheKey);
+      await createDirectory(_cacheKey, _useDocumentsDir);
     }
     return directory.childFile(name);
   }
